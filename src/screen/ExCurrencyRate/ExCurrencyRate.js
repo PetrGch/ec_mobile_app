@@ -1,10 +1,10 @@
 import React, { PureComponent } from "react";
-import {ActivityIndicator, Text, View, StyleSheet, FlatList, ScrollView} from "react-native";
+import {ActivityIndicator, Text, View, StyleSheet, ScrollView} from "react-native";
 import SplashScreen from 'react-native-splash-screen'
 
-import {getCentralBankData} from "./exCurrencyRateCalculation";
+import {getCentralBankData} from "../../component/ExCurrencyCalculator/exCurrencyCalculation";
 import {ExCurrencyRateItem} from "./ExCurrencyRateItem/ExCurrencyRateItem";
-import ExCurrencyCalculator from "../../component/ExCurrencyCalculator";
+import ExCurrencyCalculator from "../../component/ExCurrencyCalculator/ExCurrencyCalculator";
 
 export default class ExCurrencyRate extends PureComponent {
   componentDidMount() {
@@ -22,14 +22,19 @@ export default class ExCurrencyRate extends PureComponent {
       return null;
     }
 
-    return centralBankData.exchange_currencies.map((itemData) => (
-      <ExCurrencyRateItem
-        key={itemData.id.toString()}
-        currencyType={itemData.currency_type}
-        sellPrice={itemData.exchange_currency_amounts[0].sell_price}
-        buyPrice={itemData.exchange_currency_amounts[0].buy_price}
-      />
-    ))
+    return centralBankData.exchange_currencies.map((itemData, index) => {
+      const backgroundColor = index % 2 !== 0 ? "#eee" : "#fff" ;
+
+      return (
+        <ExCurrencyRateItem
+          key={itemData.id.toString()}
+          style={{ backgroundColor }}
+          currencyType={itemData.currency_type}
+          buyPrice={itemData.exchange_currency_amounts[0].buy_price}
+          sellPrice={itemData.exchange_currency_amounts[0].sell_price}
+        />
+      )
+    })
   }
 
   render() {
@@ -66,6 +71,23 @@ export default class ExCurrencyRate extends PureComponent {
             Forriegn Currency Rates
           </Text>
 
+          <View style={styles.currencyHeaderContainer}>
+            <View style={styles.currencyHeaderTitle}>
+              <Text style={styles.currencyHeaderTitleText}>
+                Currency
+              </Text>
+            </View>
+            <View style={styles.currencyHeaderPrice}>
+              <Text style={styles.currencyHeaderPriceText}>
+                Buy
+              </Text>
+            </View>
+            <View style={styles.currencyHeaderPrice}>
+              <Text style={styles.currencyHeaderPriceText}>
+                Sell
+              </Text>
+            </View>
+          </View>
           {exCurrencyRateList}
         </View>
       </ScrollView>
@@ -85,7 +107,31 @@ const styles = StyleSheet.create({
   title: {
     margin: 8,
     marginTop: 10,
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: "bold"
+  },
+  currencyHeaderContainer: {
+    width: "100%",
+    height: 40,
+    alignItems: "center",
+    flexDirection: "row",
+    backgroundColor: "#eee"
+  },
+  currencyHeaderTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "50%",
+  },
+  currencyHeaderTitleText: {
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  currencyHeaderPrice: {
+    width: "25%",
+  },
+  currencyHeaderPriceText: {
+    fontSize: 16,
     fontWeight: "bold"
   }
 });

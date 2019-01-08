@@ -2,8 +2,6 @@ import { Navigation } from "react-native-navigation";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-{/*<i className="fas fa-search-location"></i>*/}
-
 export const goToExCurrency = () => {
   Promise.all([
     FontAwesome.getImageSource("building", 30),

@@ -5,11 +5,11 @@ import Flag from 'react-native-flags';
 import {currencyMarks} from "../../../util/currencyMark";
 import {numberValidator} from "../../../util/validator";
 
-export function ExCurrencyRateItem({ currencyType, sellPrice, buyPrice }) {
+export function ExCurrencyRateItem({ currencyType, sellPrice, buyPrice, style }) {
   const currencyMark = currencyMarks[currencyType];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.title}>
         <Flag
           code={currencyType.slice(0, 2)}
@@ -20,12 +20,12 @@ export function ExCurrencyRateItem({ currencyType, sellPrice, buyPrice }) {
       </View>
       <View style={styles.price}>
         <Text style={styles.priceText}>
-          {numberValidator(sellPrice).toFixed(2)} {currencyMark}
+          {numberValidator(buyPrice).toFixed(2)} {currencyMark}
         </Text>
       </View>
       <View style={styles.price}>
         <Text style={styles.priceText}>
-          {numberValidator(buyPrice).toFixed(2)} {currencyMark}
+          {numberValidator(sellPrice).toFixed(2)} {currencyMark}
         </Text>
       </View>
     </View>
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     flexDirection: "row",
-    marginBottom: 10,
     paddingLeft: 8,
     paddingRight: 8,
     backgroundColor: "#eee"
@@ -50,14 +49,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     marginLeft: 8,
-    fontSize: 18,
-    fontWeight: "bold"
+    fontSize: 16
   },
   price: {
     width: "25%",
   },
   priceText: {
-    fontSize: 16,
-    fontWeight: "bold"
+    fontSize: 16
   }
 });

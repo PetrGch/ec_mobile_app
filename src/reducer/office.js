@@ -21,7 +21,8 @@ export default function office(state = initialState, action) {
     case SELECT_CURRENCY_TYPE:
       return {
         ...state,
-        selectedCurrency: action.currencyType
+        selectedCurrency: action.currencyType,
+        filteredOffices: filterByCurrency(state.offices, action.currencyType, state.currencyAmount)
       };
     default:
       return state

@@ -1,10 +1,18 @@
 import React, { PureComponent } from "react";
-import {ActivityIndicator, Text, View, StyleSheet} from "react-native";
-import SplashScreen from 'react-native-splash-screen'
+import {ActivityIndicator, View, StyleSheet} from "react-native";
+
+import ExCurrencyCalculator from "../../component/ExCurrencyCalculator/ExCurrencyCalculator";
 
 export default class ExCurrencyOffice extends PureComponent {
   render() {
-    const { offices, isLoading } = this.props;
+    const {
+      isLoading,
+      filteredOffices,
+      currencyAmount,
+      selectedCurrency,
+      currencyTypes,
+      selectCurrencyType
+    } = this.props;
 
     if (isLoading) {
       return (
@@ -16,7 +24,13 @@ export default class ExCurrencyOffice extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <Text>All Offices</Text>
+        <ExCurrencyCalculator
+          currencyTypes={currencyTypes}
+          filteredOffices={filteredOffices}
+          currencyAmount={currencyAmount}
+          selectedCurrency={selectedCurrency}
+          selectCurrencyType={selectCurrencyType}
+        />
       </View>
     );
   }
