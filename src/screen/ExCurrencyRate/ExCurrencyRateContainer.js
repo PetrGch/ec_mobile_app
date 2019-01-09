@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-import {getAllOffices, selectCurrencyType} from "../../action/office";
+import {getAllOffices, selectCurrencyType, setCurrencyAmount} from "../../action/office";
 import ExCurrencyRate from "./ExCurrencyRate";
 
 function mapStateToProps(state) {
@@ -17,7 +17,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadAllOffices: () => dispatch(getAllOffices()),
-    selectCurrencyType: (currencyType) => dispatch(selectCurrencyType(currencyType))
+    selectCurrencyType: (currencyType) => dispatch(selectCurrencyType(currencyType)),
+    setCurrencyAmount: (currencyAmount) => dispatch(setCurrencyAmount(currencyAmount))
   }
 }
 

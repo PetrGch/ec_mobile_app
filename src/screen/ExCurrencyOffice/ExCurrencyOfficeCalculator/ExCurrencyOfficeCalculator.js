@@ -1,9 +1,7 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { Radio } from "../lib";
-import {calculateCurrencyAmount, calculateCurrencySum} from "./exCurrencyCalculation";
+import {Radio} from "../../../component/lib";
 
 const IS_BUY = "IS_BUY";
 const IS_SELL = "IS_SELL";
@@ -22,33 +20,18 @@ function getPickerItems(currencyTypes) {
   ))
 }
 
-export default class ExCurrencyCalculator extends PureComponent {
+export default class ExCurrencyOfficeCalculator extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       operationType: IS_BUY,
-      isCurrencySumHandlerTriggered: false,
-      currencySum: calculateCurrencySum(props.currencyAmount, props.filteredOffices, props.operationType),
+      currencyAmount: "100",
     };
 
     this.selectCurrencyType = this.selectCurrencyType.bind(this);
     this.selectOperationType = this.selectOperationType.bind(this);
     this.changeCurrencyAmount = this.changeCurrencyAmount.bind(this);
-    this.changeCurrencySum = this.changeCurrencySum.bind(this);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { selectedCurrency, filteredOffices, currencyAmount } = this.props;
-    const { operationType, isCurrencySumHandlerTriggered } = this.state;
-
-    if (selectedCurrency !== prevProps.selectedCurrency
-      || operationType !== prevState.operationType
-      || (currencyAmount !== prevProps.currencyAmount && !isCurrencySumHandlerTriggered)) {
-      this.setState({
-        currencySum: calculateCurrencySum(currencyAmount, filteredOffices, operationType),
-      })
-    }
   }
 
   selectCurrencyType(itemValue) {
@@ -62,44 +45,20 @@ export default class ExCurrencyCalculator extends PureComponent {
 
     if (type !== operationType) {
       this.setState({
-        operationType: type
+        operationType: type,
       });
     }
   }
 
   changeCurrencyAmount(value) {
-    const { setCurrencyAmount } = this.props;
-    const { isCurrencySumHandlerTriggered } = this.state;
-    const currencyAmount = value !== "" ? parseInt(value) : "";
-
-    setCurrencyAmount(currencyAmount);
-
-    if (isCurrencySumHandlerTriggered) {
-    this.setState(
-      {
-        isCurrencySumHandlerTriggered: false
-      })
-    }
-  }
-
-  changeCurrencySum(value) {
-    const { filteredOffices, setCurrencyAmount } = this.props;
-    const { operationType } = this.state;
-    const currencyAmount = calculateCurrencyAmount(value, filteredOffices, operationType);
-
-    this.setState(
-      {
-        currencySum: value,
-        isCurrencySumHandlerTriggered: true
-      },
-      () => {
-      setCurrencyAmount(currencyAmount);
-    })
+    this.setState({
+      currencyAmount: value
+    });
   }
 
   render() {
-    const { currencyTypes, currencyAmount, selectedCurrency } = this.props;
-    const { operationType, currencySum } = this.state;
+    const { currencyTypes, selectedCurrency } = this.props;
+    const { operationType, currencyAmount } = this.state;
     const pickerItem = getPickerItems(currencyTypes);
 
     if (!currencyTypes) {
@@ -144,20 +103,11 @@ export default class ExCurrencyCalculator extends PureComponent {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputItem}
-            value={currencyAmount.toString()}
+            value={currencyAmount}
             placeholder="Amount"
             placeholderTextColor="#ccc"
             keyboardType="numeric"
             onChangeText={this.changeCurrencyAmount}
-          />
-          <FontAwesome name="exchange" size={20}/>
-          <TextInput
-            style={styles.inputItem}
-            value={currencySum.toString()}
-            placeholder="Sum"
-            placeholderTextColor="#ccc"
-            keyboardType="decimal-pad"
-            onChangeText={this.changeCurrencySum}
           />
         </View>
       </View>

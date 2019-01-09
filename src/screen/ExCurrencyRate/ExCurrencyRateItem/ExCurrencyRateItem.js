@@ -12,6 +12,7 @@ export function ExCurrencyRateItem({ currencyType, sellPrice, buyPrice, style })
     <View style={[styles.container, style]}>
       <View style={styles.title}>
         <Flag
+          size={48}
           code={currencyType.slice(0, 2)}
         />
         <Text style={styles.titleText}>

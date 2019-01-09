@@ -1,5 +1,5 @@
 import {uiStartLoading, uiStopLoading} from "./ui";
-import {SELECT_CURRENCY_TYPE, SET_ALL_OFFICES} from "../constant/office";
+import {SELECT_CURRENCY_TYPE, SET_ALL_OFFICES, SET_CURRENCY_AMOUNT} from "../constant/office";
 import {prepopulateCurrencyType} from "./actionCalculation";
 
 function setAllOffices(offices) {
@@ -32,6 +32,13 @@ export function selectCurrencyType(currencyType) {
   return {
     currencyType,
     type: SELECT_CURRENCY_TYPE,
+  }
+}
+
+export function setCurrencyAmount(currencyAmount) {
+  return {
+    currencyAmount,
+    type: SET_CURRENCY_AMOUNT,
   }
 }
 

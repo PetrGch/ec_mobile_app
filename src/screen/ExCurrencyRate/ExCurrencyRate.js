@@ -44,7 +44,9 @@ export default class ExCurrencyRate extends PureComponent {
       currencyAmount,
       selectedCurrency,
       currencyTypes,
-      selectCurrencyType
+
+      selectCurrencyType,
+      setCurrencyAmount
     } = this.props;
     let exCurrencyRateList = this.getExCurrencyRateList();
 
@@ -65,6 +67,7 @@ export default class ExCurrencyRate extends PureComponent {
             currencyAmount={currencyAmount}
             selectedCurrency={selectedCurrency}
             selectCurrencyType={selectCurrencyType}
+            setCurrencyAmount={setCurrencyAmount}
           />
 
           <Text style={styles.title}>

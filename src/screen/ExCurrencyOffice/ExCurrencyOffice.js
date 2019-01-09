@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import {ActivityIndicator, View, StyleSheet} from "react-native";
 
-import ExCurrencyCalculator from "../../component/ExCurrencyCalculator/ExCurrencyCalculator";
+import ExCurrencyOfficeCalculator from "./ExCurrencyOfficeCalculator/ExCurrencyOfficeCalculator";
 
 export default class ExCurrencyOffice extends PureComponent {
   render() {
@@ -24,7 +24,7 @@ export default class ExCurrencyOffice extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <ExCurrencyCalculator
+        <ExCurrencyOfficeCalculator
           currencyTypes={currencyTypes}
           filteredOffices={filteredOffices}
           currencyAmount={currencyAmount}
