@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 
 import ExCurrencyOffice from "./ExCurrencyOffice";
 import {selectCurrencyType} from "../../action";
+import {setCurrencyAmount} from "../../action/office";
 
 function mapStateToProps(state) {
   return {
@@ -16,7 +17,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    selectCurrencyType: (currencyType) => dispatch(selectCurrencyType(currencyType))
+    selectCurrencyType: (currencyType) => dispatch(selectCurrencyType(currencyType)),
+    setCurrencyAmount: (currencyAmount) => dispatch(setCurrencyAmount(currencyAmount))
   }
 }
 

@@ -71,7 +71,7 @@ export default class ExCurrencyRate extends PureComponent {
           />
 
           <Text style={styles.title}>
-            Forriegn Currency Rates
+            Exchange Rates
           </Text>
 
           <View style={styles.currencyHeaderContainer}>

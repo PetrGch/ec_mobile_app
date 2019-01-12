@@ -1,5 +1,5 @@
-import React, { PureComponent } from "react";
-import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
+import React, { Component } from "react";
+import {StyleSheet, Text, View, Picker, TextInput, Slider} from "react-native";
 
 import {Radio} from "../../../component/lib";
 
@@ -20,18 +20,19 @@ function getPickerItems(currencyTypes) {
   ))
 }
 
-export default class ExCurrencyOfficeCalculator extends PureComponent {
+export default class ExCurrencyOfficeCalculator extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       operationType: IS_BUY,
-      currencyAmount: "100",
+      sliderValue: 100
     };
 
     this.selectCurrencyType = this.selectCurrencyType.bind(this);
     this.selectOperationType = this.selectOperationType.bind(this);
     this.changeCurrencyAmount = this.changeCurrencyAmount.bind(this);
+    this.setSliderValue = this.setSliderValue.bind(this);
   }
 
   selectCurrencyType(itemValue) {
@@ -45,20 +46,32 @@ export default class ExCurrencyOfficeCalculator extends PureComponent {
 
     if (type !== operationType) {
       this.setState({
-        operationType: type,
+        operationType: type
       });
     }
   }
 
   changeCurrencyAmount(value) {
+    const { setCurrencyAmount } = this.props;
+    const currencyAmount = value !== "" ? parseInt(value) : "";
+
+    setCurrencyAmount(currencyAmount);
+  }
+
+  setSliderValue(value) {
+    const { setCurrencyAmount } = this.props;
+    // const currencyAmount = value !== "" ? parseInt(value) : "";
+
+    console.log("HERE", value)
     this.setState({
-      currencyAmount: value
+      sliderValue: value
     });
+    setCurrencyAmount(value);
   }
 
   render() {
-    const { currencyTypes, selectedCurrency } = this.props;
-    const { operationType, currencyAmount } = this.state;
+    const { currencyTypes, currencyAmount, selectedCurrency } = this.props;
+    const { operationType, sliderValue } = this.state;
     const pickerItem = getPickerItems(currencyTypes);
 
     if (!currencyTypes) {
@@ -103,11 +116,20 @@ export default class ExCurrencyOfficeCalculator extends PureComponent {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputItem}
-            value={currencyAmount}
+            value={currencyAmount.toString()}
             placeholder="Amount"
             placeholderTextColor="#ccc"
             keyboardType="numeric"
             onChangeText={this.changeCurrencyAmount}
+          />
+          <Slider
+            style={styles.inputSlider}
+            value={+currencyAmount}
+            step={10}
+            maximumValue={1000}
+            minimumTrackTintColor="#69c15b"
+            thumbTintColor="#69c15b"
+            onSlidingComplete={this.setSliderValue}
           />
         </View>
       </View>
@@ -163,12 +185,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
   },
   inputItem: {
-    width: "44%",
+    width: "100%",
     height: 40,
     paddingTop: 0,
     paddingBottom: 0,
@@ -178,5 +197,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#69c15b",
     borderRadius: 6
+  },
+  inputSlider: {
+    marginTop: 10
   }
 });

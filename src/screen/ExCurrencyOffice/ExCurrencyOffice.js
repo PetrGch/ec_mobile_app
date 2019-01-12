@@ -1,7 +1,8 @@
 import React, { PureComponent } from "react";
-import {ActivityIndicator, View, StyleSheet} from "react-native";
+import {ActivityIndicator, View, StyleSheet, ScrollView} from "react-native";
 
 import ExCurrencyOfficeCalculator from "./ExCurrencyOfficeCalculator/ExCurrencyOfficeCalculator";
+import ExCurrencyOfficeList from "./ExCurrencyOfficeList/ExCurrencyOfficeList";
 
 export default class ExCurrencyOffice extends PureComponent {
   render() {
@@ -11,7 +12,9 @@ export default class ExCurrencyOffice extends PureComponent {
       currencyAmount,
       selectedCurrency,
       currencyTypes,
-      selectCurrencyType
+
+      selectCurrencyType,
+      setCurrencyAmount
     } = this.props;
 
     if (isLoading) {
@@ -23,15 +26,21 @@ export default class ExCurrencyOffice extends PureComponent {
     }
 
     return (
-      <View style={styles.container}>
-        <ExCurrencyOfficeCalculator
-          currencyTypes={currencyTypes}
-          filteredOffices={filteredOffices}
-          currencyAmount={currencyAmount}
-          selectedCurrency={selectedCurrency}
-          selectCurrencyType={selectCurrencyType}
-        />
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <ExCurrencyOfficeCalculator
+            currencyTypes={currencyTypes}
+            filteredOffices={filteredOffices}
+            currencyAmount={currencyAmount}
+            selectedCurrency={selectedCurrency}
+            selectCurrencyType={selectCurrencyType}
+            setCurrencyAmount={setCurrencyAmount}
+          />
+          <ExCurrencyOfficeList
+            filteredOffices={filteredOffices}
+          />
+        </View>
+      </ScrollView>
     );
   }
 }
