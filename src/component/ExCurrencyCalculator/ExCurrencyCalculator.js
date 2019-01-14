@@ -29,7 +29,7 @@ export default class ExCurrencyCalculator extends PureComponent {
     this.state = {
       operationType: IS_BUY,
       isCurrencySumHandlerTriggered: false,
-      currencySum: calculateCurrencySum(props.currencyAmount, props.filteredOffices, props.operationType),
+      currencySum: calculateCurrencySum(props.currencyAmount, props.filteredOffices, props.operationType, props.officeName),
     };
 
     this.selectCurrencyType = this.selectCurrencyType.bind(this);
@@ -39,14 +39,14 @@ export default class ExCurrencyCalculator extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { selectedCurrency, filteredOffices, currencyAmount } = this.props;
+    const { selectedCurrency, filteredOffices, currencyAmount, officeName } = this.props;
     const { operationType, isCurrencySumHandlerTriggered } = this.state;
 
     if (selectedCurrency !== prevProps.selectedCurrency
       || operationType !== prevState.operationType
       || (currencyAmount !== prevProps.currencyAmount && !isCurrencySumHandlerTriggered)) {
       this.setState({
-        currencySum: calculateCurrencySum(currencyAmount, filteredOffices, operationType),
+        currencySum: calculateCurrencySum(currencyAmount, filteredOffices, operationType, officeName),
       })
     }
   }
@@ -83,9 +83,9 @@ export default class ExCurrencyCalculator extends PureComponent {
   }
 
   changeCurrencySum(value) {
-    const { filteredOffices, setCurrencyAmount } = this.props;
+    const { filteredOffices, setCurrencyAmount, officeName } = this.props;
     const { operationType } = this.state;
-    const currencyAmount = calculateCurrencyAmount(value, filteredOffices, operationType);
+    const currencyAmount = calculateCurrencyAmount(value, filteredOffices, operationType, officeName);
 
     this.setState(
       {
@@ -98,11 +98,11 @@ export default class ExCurrencyCalculator extends PureComponent {
   }
 
   render() {
-    const { currencyTypes, currencyAmount, selectedCurrency } = this.props;
+    const { currencyTypes, currencyAmount, selectedCurrency, officeName } = this.props;
     const { operationType, currencySum } = this.state;
     const pickerItem = getPickerItems(currencyTypes);
 
-    if (!currencyTypes) {
+    if (!currencyTypes || !officeName) {
       return null;
     }
 
@@ -114,7 +114,6 @@ export default class ExCurrencyCalculator extends PureComponent {
             <Picker
               selectedValue={selectedCurrency}
               style={styles.dropDownPicker}
-              itemStyle={{ backgroundColor: "red" }}
               mode={"dropdown"}
               onValueChange={this.selectCurrencyType}>
               {pickerItem}
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 8,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold"
   },
   optionsPanel: {
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   sellBuyOptionItemText: {
-    fontSize: 16
+    fontSize: 14
   },
   inputContainer: {
     marginTop: 10,
@@ -224,7 +223,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     paddingLeft: 8,
     paddingRight: 8,
-    fontSize: 16,
+    fontSize: 14,
     borderWidth: 1,
     borderColor: "#69c15b",
     borderRadius: 6

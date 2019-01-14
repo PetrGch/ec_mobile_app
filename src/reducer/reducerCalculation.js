@@ -1,4 +1,4 @@
-import {currencyMarks} from "../util/currencyMark";
+import {currencyMarks} from "../component/util/currencyMark";
 
 function filterAmounts(currency, currencyAmount) {
   let buy_price = 0;

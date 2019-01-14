@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import {StyleSheet, Text, View, Picker, TextInput, Slider} from "react-native";
 
 import {Radio} from "../../../component/lib";
+import {CURRENCY_OPERATION_TYPE} from "../ExCurrencyOffice";
 
-const IS_BUY = "IS_BUY";
-const IS_SELL = "IS_SELL";
 const { Item } = Picker;
 
 function getPickerItems(currencyTypes) {
@@ -24,13 +23,7 @@ export default class ExCurrencyOfficeCalculator extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      operationType: IS_BUY,
-      sliderValue: 100
-    };
-
     this.selectCurrencyType = this.selectCurrencyType.bind(this);
-    this.selectOperationType = this.selectOperationType.bind(this);
     this.changeCurrencyAmount = this.changeCurrencyAmount.bind(this);
     this.setSliderValue = this.setSliderValue.bind(this);
   }
@@ -39,16 +32,6 @@ export default class ExCurrencyOfficeCalculator extends Component {
     const { selectCurrencyType } = this.props;
 
     selectCurrencyType(itemValue);
-  }
-
-  selectOperationType(type) {
-    const { operationType } = this.state;
-
-    if (type !== operationType) {
-      this.setState({
-        operationType: type
-      });
-    }
   }
 
   changeCurrencyAmount(value) {
@@ -60,18 +43,19 @@ export default class ExCurrencyOfficeCalculator extends Component {
 
   setSliderValue(value) {
     const { setCurrencyAmount } = this.props;
-    // const currencyAmount = value !== "" ? parseInt(value) : "";
 
-    console.log("HERE", value)
-    this.setState({
-      sliderValue: value
-    });
     setCurrencyAmount(value);
   }
 
   render() {
-    const { currencyTypes, currencyAmount, selectedCurrency } = this.props;
-    const { operationType, sliderValue } = this.state;
+    const {
+      currencyTypes,
+      currencyAmount,
+      operationType,
+
+      selectedCurrency,
+      selectOperationType
+    } = this.props;
     const pickerItem = getPickerItems(currencyTypes);
 
     if (!currencyTypes) {
@@ -96,17 +80,17 @@ export default class ExCurrencyOfficeCalculator extends Component {
           <View style={styles.sellBuyOption}>
             <View style={[styles.sellBuyOptionItem, { marginLeft: 8}]}>
               <Radio
-                value={IS_BUY}
-                selected={operationType === IS_BUY}
-                onPress={this.selectOperationType}
+                value={CURRENCY_OPERATION_TYPE.IS_BUY}
+                selected={operationType === CURRENCY_OPERATION_TYPE.IS_BUY}
+                onPress={selectOperationType}
               />
               <Text style={styles.sellBuyOptionItemText}>Buy</Text>
             </View>
             <View style={[styles.sellBuyOptionItem, { marginRight: 8}]}>
               <Radio
-                value={IS_SELL}
-                selected={operationType === IS_SELL}
-                onPress={this.selectOperationType}
+                value={CURRENCY_OPERATION_TYPE.IS_SELL}
+                selected={operationType === CURRENCY_OPERATION_TYPE.IS_SELL}
+                onPress={selectOperationType}
               />
               <Text style={styles.sellBuyOptionItemText}>Sell</Text>
             </View>
@@ -117,6 +101,7 @@ export default class ExCurrencyOfficeCalculator extends Component {
           <TextInput
             style={styles.inputItem}
             value={currencyAmount.toString()}
+            maxLength={5}
             placeholder="Amount"
             placeholderTextColor="#ccc"
             keyboardType="numeric"
@@ -144,7 +129,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 8,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold"
   },
   optionsPanel: {
@@ -181,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   sellBuyOptionItemText: {
-    fontSize: 16
+    fontSize: 14
   },
   inputContainer: {
     marginTop: 10,
@@ -193,7 +178,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     paddingLeft: 8,
     paddingRight: 8,
-    fontSize: 16,
+    fontSize: 14,
     borderWidth: 1,
     borderColor: "#69c15b",
     borderRadius: 6

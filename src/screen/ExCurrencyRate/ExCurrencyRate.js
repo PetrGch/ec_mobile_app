@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import {ActivityIndicator, Text, View, StyleSheet, ScrollView} from "react-native";
 import SplashScreen from 'react-native-splash-screen'
 
-import {getCentralBankData} from "../../component/ExCurrencyCalculator/exCurrencyCalculation";
+import {getOfficeByName} from "../../component/ExCurrencyCalculator/exCurrencyCalculation";
 import {ExCurrencyRateItem} from "./ExCurrencyRateItem/ExCurrencyRateItem";
 import ExCurrencyCalculator from "../../component/ExCurrencyCalculator/ExCurrencyCalculator";
 
@@ -16,7 +16,7 @@ export default class ExCurrencyRate extends PureComponent {
 
   getExCurrencyRateList() {
     const { offices } = this.props;
-    const centralBankData = getCentralBankData(offices);
+    const centralBankData = getOfficeByName(offices, "Central Bank Of Thailand");
 
     if (!centralBankData || !centralBankData.exchange_currencies) {
       return null;
@@ -62,6 +62,7 @@ export default class ExCurrencyRate extends PureComponent {
       <ScrollView>
         <View style={styles.container}>
           <ExCurrencyCalculator
+            officeName="Central Bank Of Thailand"
             currencyTypes={currencyTypes}
             filteredOffices={filteredOffices}
             currencyAmount={currencyAmount}
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   title: {
     margin: 8,
     marginTop: 10,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold"
   },
   currencyHeaderContainer: {
@@ -127,14 +128,14 @@ const styles = StyleSheet.create({
   },
   currencyHeaderTitleText: {
     marginLeft: 8,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold"
   },
   currencyHeaderPrice: {
     width: "25%",
   },
   currencyHeaderPriceText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold"
   }
 });

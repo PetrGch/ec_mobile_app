@@ -2,8 +2,8 @@ import React from "react";
 import {Text, View, StyleSheet} from "react-native";
 import Flag from 'react-native-flags';
 
-import {currencyMarks} from "../../../util/currencyMark";
-import {numberValidator} from "../../../util/validator";
+import {currencyMarks} from "../../../component/util/currencyMark";
+import {parseToNumber} from "../../../component/util/validator";
 
 export function ExCurrencyRateItem({ currencyType, sellPrice, buyPrice, style }) {
   const currencyMark = currencyMarks[currencyType];
@@ -21,12 +21,12 @@ export function ExCurrencyRateItem({ currencyType, sellPrice, buyPrice, style })
       </View>
       <View style={styles.price}>
         <Text style={styles.priceText}>
-          {numberValidator(buyPrice).toFixed(2)} {currencyMark}
+          {parseToNumber(buyPrice).toFixed(2)} {currencyMark}
         </Text>
       </View>
       <View style={styles.price}>
         <Text style={styles.priceText}>
-          {numberValidator(sellPrice).toFixed(2)} {currencyMark}
+          {parseToNumber(sellPrice).toFixed(2)} {currencyMark}
         </Text>
       </View>
     </View>
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     marginLeft: 8,
-    fontSize: 16
+    fontSize: 14
   },
   price: {
     width: "25%",
   },
   priceText: {
-    fontSize: 16
+    fontSize: 14
   }
 });
