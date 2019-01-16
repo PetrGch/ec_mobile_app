@@ -6,7 +6,7 @@ import {CURRENCY_OPERATION_TYPE} from "../../ExCurrencyOffice";
 import {parseToFloat} from "../../../../component/util/validator";
 
 export default function ExCurrencyOfficeItem(props) {
-  const  { company_name, branch_name, buy_price, sell_price,
+  const  { company_name, branch_name, buy_price, sell_price, workingTime, address, updated_at,
     currencyAmount, operationType, currencyMark, lat, lng, google_map_url, style } = props;
   const price = operationType === CURRENCY_OPERATION_TYPE.IS_BUY ? buy_price : sell_price;
   const sum = price * currencyAmount;
@@ -20,7 +20,13 @@ export default function ExCurrencyOfficeItem(props) {
           company_name,
           lat,
           lng,
-          google_map_url
+          google_map_url,
+          workingTime,
+          address,
+          updated_at,
+          buy_price,
+          sell_price,
+          currencyMark
         },
         options: {
           topBar: {

@@ -9,12 +9,18 @@ function mapStateToProps(state, props) {
     companyName: props.company_name,
     lat: props.lat,
     lng: props.lng,
+    workingTime: props.workingTime,
+    address: props.address,
+    updatedAt: props.updated_at,
+    buyPrice: props.buy_price,
+    sellPrice: props.sell_price,
+    currencyMark: props.currencyMark,
     googleMapUrl: props.google_map_url,
     currencyTypes: state.office.currencyTypes,
     filteredOffices: state.office.filteredOffices,
     selectedCurrency: state.office.selectedCurrency,
     currencyAmount: state.office.currencyAmount,
-    isLoading: state.ui.isLoading
+    isLoading: state.ui.isLoading,
   }
 }
 
