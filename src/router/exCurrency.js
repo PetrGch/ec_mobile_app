@@ -4,8 +4,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export const goToExCurrency = () => {
   Promise.all([
-    FontAwesome.getImageSource("building", 30),
+    FontAwesome.getImageSource("home", 30),
     FontAwesome5.getImageSource("money-bill", 30),
+    FontAwesome.getImageSource("building", 30),
   ]).then((images) => {
     Navigation.setDefaultOptions({
       bottomTabs: {
@@ -22,6 +23,34 @@ export const goToExCurrency = () => {
       root: {
         bottomTabs: {
           children: [
+            {
+              stack: {
+                children: [
+                  {
+                    component: {
+                      id: "exCurrencyHome",
+                      name: 'excurrate.exCurrencyHome',
+                      options: {
+                        bottomTab: {
+                          fontSize: 12,
+                          text: 'Home',
+                          icon: images[0],
+                        },
+                        topBar: {
+                          title: {
+                            text: 'Home',
+                            color: "#fff"
+                          },
+                          background: {
+                            color: "#69c15b"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
             {
               stack: {
                 children: [
@@ -61,7 +90,7 @@ export const goToExCurrency = () => {
                         bottomTab: {
                           fontSize: 12,
                           text: "Office",
-                          icon: images[0]
+                          icon: images[2]
                         },
                         topBar: {
                           title: {

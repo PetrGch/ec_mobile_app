@@ -1,4 +1,4 @@
-import {SELECT_CURRENCY_TYPE, SET_ALL_OFFICES, SET_CURRENCY_AMOUNT} from "../constant/office";
+import {SELECT_CURRENCY_TYPE, SET_ALL_OFFICES, SET_CENTRAL_BANK_DATA, SET_CURRENCY_AMOUNT} from "../constant/office";
 import {filterByCurrency} from "./reducerCalculation";
 
 const initialState = {
@@ -6,7 +6,8 @@ const initialState = {
   currencyTypes: null,
   selectedCurrency: "EUR",
   currencyAmount: 100,
-  filteredOffices: null
+  filteredOffices: null,
+  centralBankData: null
 };
 
 export default function office(state = initialState, action) {
@@ -30,6 +31,11 @@ export default function office(state = initialState, action) {
         ...state,
         currencyAmount: action.currencyAmount,
         filteredOffices: filterByCurrency(state.offices, state.selectedCurrency, currencyAmountForFiltering)
+      };
+    case SET_CENTRAL_BANK_DATA:
+      return {
+        ...state,
+        centralBankData: action.centralBankData
       };
     default:
       return state

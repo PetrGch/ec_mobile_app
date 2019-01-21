@@ -6,7 +6,7 @@ import {CURRENCY_OPERATION_TYPE} from "../../ExCurrencyOffice";
 import {parseToFloat} from "../../../../component/util/validator";
 
 export default function ExCurrencyOfficeItem(props) {
-  const  { company_name, branch_name, buy_price, sell_price, workingTime, address, updated_at,
+  const  { id, company_name, branch_name, buy_price, sell_price, workingTime, address, updated_at,
     currencyAmount, operationType, currencyMark, lat, lng, google_map_url, style } = props;
   const price = operationType === CURRENCY_OPERATION_TYPE.IS_BUY ? buy_price : sell_price;
   const sum = price * currencyAmount;
@@ -16,17 +16,8 @@ export default function ExCurrencyOfficeItem(props) {
       component: {
         name: "excurrate.exCurrencyOfficeInfo",
         passProps: {
-          branch_name,
-          company_name,
-          lat,
-          lng,
-          google_map_url,
-          workingTime,
-          address,
-          updated_at,
-          buy_price,
-          sell_price,
-          currencyMark
+          id,
+          branch_name
         },
         options: {
           topBar: {
@@ -52,6 +43,7 @@ export default function ExCurrencyOfficeItem(props) {
         <View style={styles.infoColumn}>
           <Text style={styles.infoColumnTitle}>{company_name}</Text>
           <Text style={styles.infoColumnDubTitle}>{branch_name}</Text>
+          <Text style={styles.info}>More info</Text>
         </View>
         <View style={styles.buyColumn}>
           <Text>{parseToFloat(price)} {currencyMark}</Text>
@@ -86,5 +78,10 @@ const styles = StyleSheet.create({
   },
   sellColumn: {
     width: "25%"
+  },
+  info: {
+    marginTop: 4,
+    fontSize: 12,
+    color: "#07C"
   }
 });

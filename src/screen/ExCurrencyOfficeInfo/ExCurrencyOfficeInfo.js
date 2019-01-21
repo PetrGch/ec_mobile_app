@@ -1,5 +1,14 @@
 import React, { PureComponent } from "react";
-import {Dimensions, Linking, ScrollView, StyleSheet, Text, TouchableNativeFeedback, View} from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View
+} from "react-native";
 import { Navigation } from "react-native-navigation";
 import moment from "moment";
 
@@ -7,6 +16,9 @@ import ExCurrencyCalculator from "../../component/ExCurrencyCalculator/ExCurrenc
 import ExCurrencyOfficeMap from "../ExCurrencyOfficeMap/ExCurrencyOfficeMap";
 import ExCurrencyOfficeWorkTime from "./ExCurrencyOfficeWorkTime/ExCurrencyOfficeWorkTime";
 import ExCurrencyOfficeDetail from "./ExCurrencyOfficeDetail/ExCurrencyOfficeDetail";
+import {findOfficeById} from "../../reducer/reducerCalculation";
+import {getOfficeByName} from "../../component/ExCurrencyCalculator/exCurrencyCalculation";
+import ExCurrencyOfficeRange from "./ExCurrencyOfficeRange/ExCurrencyOfficeRange";
 
 export default class ExCurrencyOfficeInfo extends PureComponent {
   constructor(props) {
@@ -15,12 +27,9 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
     this.mapRef = null;
 
     this.state = {
-      focusedLocation: {
-        latitude: parseFloat(props.lat) || 13.7563,
-        longitude: parseFloat(props.lng) || 100.5018,
-        latitudeDelta: 0.0122,
-        longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-      },
+      selectedFilteredOffice: null,
+      selectedOffice: null,
+      focusedLocation: null,
       myLocation: null
     };
 
@@ -29,6 +38,36 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
     this.getMyLocation = this.getMyLocation.bind(this);
     this.openInGoogleMapApp = this.openInGoogleMapApp.bind(this);
     this.setMapRef = this.setMapRef.bind(this);
+  }
+
+  componentDidMount() {
+    const { offices, filteredOffices, branchName, id } = this.props;
+    const selectedOffice = findOfficeById(id, offices);
+    const selectedFilteredOffice = getOfficeByName(filteredOffices, branchName);
+
+    if (selectedOffice) {
+      this.setState({
+        selectedOffice,
+        selectedFilteredOffice,
+        focusedLocation: {
+          latitude: parseFloat(selectedOffice.lat) || 13.7563,
+          longitude: parseFloat(selectedOffice.lng) || 100.5018,
+          latitudeDelta: 0.0122,
+          longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
+        }
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedCurrency, filteredOffices, currencyAmount, branchName } = this.props;
+
+    if (selectedCurrency !== prevProps.selectedCurrency
+      || (currencyAmount !== prevProps.currencyAmount)) {
+      this.setState({
+        selectedFilteredOffice: getOfficeByName(filteredOffices, branchName)
+      })
+    }
   }
 
   componentDidDisappear() {
@@ -65,15 +104,18 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
   };
 
   openInGoogleMapApp() {
-    const { googleMapUrl } = this.props;
-
-    Linking.canOpenURL(googleMapUrl).then(supported => {
-      if (supported) {
-        Linking.openURL(googleMapUrl);
-      } else {
-        console.log("Don't know how to open URI: " + googleMapUrl);
-      }
-    });
+    const { selectedOffice } = this.state;
+    if (selectedOffice && selectedOffice.google_map_url) {
+      const url = selectedOffice.google_map_url;
+      Linking.canOpenURL(url)
+        .then(supported => {
+          if (supported) {
+            Linking.openURL(url);
+          } else {
+            console.log("Don't know how to open URI: " + url);
+          }
+      });
+    }
   };
 
   setMapRef(ref) {
@@ -82,32 +124,30 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
 
   render() {
     const {
-      branchName,
-      companyName,
       currencyTypes,
       filteredOffices,
       currencyAmount,
       selectedCurrency,
-      lat,
-      lng,
-      workingTime,
-      address,
-      updatedAt,
-      buyPrice,
-      sellPrice,
-      currencyMark,
 
       selectCurrencyType,
       setCurrencyAmount
     } = this.props;
-    const { focusedLocation, myLocation } = this.state;
+    const { focusedLocation, myLocation, selectedOffice, selectedFilteredOffice } = this.state;
+
+    if (!selectedOffice || !selectedFilteredOffice) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
 
     return (
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.officeName}>Office name: {companyName}</Text>
-            <Text style={styles.branchName}>Branch name: {branchName}</Text>
+            <Text style={styles.officeName}>Office name: {selectedOffice.company_name}</Text>
+            <Text style={styles.branchName}>Branch name: {selectedOffice.branch_name}</Text>
           </View>
 
           <View style={styles.priceContainer}>
@@ -115,22 +155,28 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
               <Text style={{ marginBottom: 6, fontWeight: "bold" }}>
                 Last update:
               </Text>
-              <Text>{moment(updatedAt).format("HH:mm")}</Text>
+              <Text>{moment(selectedOffice.updated_at).format("HH:mm")}</Text>
             </View>
             <View style={styles.priceValueContainer}>
               <View style={styles.priceValue}>
                 <Text style={{ fontWeight: "bold" }}>Buy: </Text>
-                <Text>{buyPrice}{currencyMark}</Text>
+                <Text>{selectedFilteredOffice.buy_price}{selectedFilteredOffice.currencyMark}</Text>
               </View>
               <View style={styles.priceValue}>
                 <Text style={{ fontWeight: "bold" }}>Sell: </Text>
-                <Text>{sellPrice}{currencyMark}</Text>
+                <Text>{selectedFilteredOffice.sell_price}{selectedFilteredOffice.currencyMark}</Text>
               </View>
             </View>
           </View>
 
+          <ExCurrencyOfficeRange
+            selectedCurrency={selectedCurrency}
+            selectedOffice={selectedOffice}
+            currencyMark={selectedFilteredOffice.currencyMark}
+          />
+
           <ExCurrencyCalculator
-            officeName={branchName}
+            officeName={selectedOffice.branch_name}
             currencyTypes={currencyTypes}
             filteredOffices={filteredOffices}
             currencyAmount={currencyAmount}
@@ -144,7 +190,7 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
             setMapRef={this.setMapRef}
             focusedLocation={focusedLocation}
             myLocation={myLocation}
-            markers={[{ latitude: parseFloat(lat), longitude: parseFloat(lng) }]}
+            markers={[{ latitude: parseFloat(selectedOffice.lat), longitude: parseFloat(selectedOffice.lng) }]}
 
           />
           <View style={styles.navigation}>
@@ -166,10 +212,11 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
           </View>
         </View>
         <ExCurrencyOfficeWorkTime
-          workingTime={workingTime}
+          workingTime={selectedOffice.exchange_company_working_time}
         />
         <ExCurrencyOfficeDetail
-          address={address}
+          address={selectedOffice.address}
+          detail={selectedOffice.exchange_company_detail}
         />
       </ScrollView>
     );
@@ -177,6 +224,11 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   container: {
     flex: 1
   },

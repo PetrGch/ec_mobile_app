@@ -6,10 +6,12 @@ import configureStore from "./src/store/configureStore";
 import ExCurrencyOfficeContainer from "./src/screen/ExCurrencyOffice/ExCurrencyOfficeContainer";
 import ExCurrencyRateContainer from "./src/screen/ExCurrencyRate/ExCurrencyRateContainer";
 import ExCurrencyOfficeInfoContainer from "./src/screen/ExCurrencyOfficeInfo/ExCurrencyOfficeInfoContainer";
+import ExCurrencyHomeContainer from "./src/screen/ExCurrencyHome/ExCurrencyHomeContainer";
 
 const store = configureStore();
 
 // Register component
+Navigation.registerComponentWithRedux("excurrate.exCurrencyHome", () => ExCurrencyHomeContainer, Provider, store);
 Navigation.registerComponentWithRedux("excurrate.exCurrencyList", () => ExCurrencyRateContainer, Provider, store);
 Navigation.registerComponentWithRedux("excurrate.exCurrencyOffice", () => ExCurrencyOfficeContainer, Provider, store);
 Navigation.registerComponentWithRedux("excurrate.exCurrencyOfficeInfo", () => ExCurrencyOfficeInfoContainer, Provider, store);

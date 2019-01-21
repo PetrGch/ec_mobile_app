@@ -1,5 +1,29 @@
 import {currencyMarks} from "../component/util/currencyMark";
 
+export function getCurrencyRange(officeName, offices) {
+  if (!offices || !officeName) {
+    return null;
+  }
+
+
+}
+
+export function validateValue(value, defaultValue = "-//-") {
+  if (value === null || value === undefined) {
+    return defaultValue;
+  }
+
+  return value;
+}
+
+export function findOfficeById(id, offices) {
+  if (!id || !offices || !Array.isArray(offices)) {
+    return null;
+  }
+
+  return offices.find((office) => id === office.id);
+}
+
 function filterAmounts(currency, currencyAmount) {
   let buy_price = 0;
   let buy_trend = 0;

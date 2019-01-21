@@ -5,17 +5,10 @@ import ExCurrencyOfficeInfo from "./ExCurrencyOfficeInfo";
 
 function mapStateToProps(state, props) {
   return {
+    id: props.id,
     branchName: props.branch_name,
-    companyName: props.company_name,
-    lat: props.lat,
-    lng: props.lng,
-    workingTime: props.workingTime,
-    address: props.address,
-    updatedAt: props.updated_at,
-    buyPrice: props.buy_price,
-    sellPrice: props.sell_price,
-    currencyMark: props.currencyMark,
-    googleMapUrl: props.google_map_url,
+
+    offices: state.office.offices,
     currencyTypes: state.office.currencyTypes,
     filteredOffices: state.office.filteredOffices,
     selectedCurrency: state.office.selectedCurrency,
