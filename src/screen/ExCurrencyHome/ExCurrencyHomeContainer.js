@@ -14,7 +14,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadAllOffices: () => dispatch(getAllOffices()),
-    loadCentralBankData: () => dispatch(getCentralBankData())
+    loadCentralBankData: (period, currencyType) => dispatch(getCentralBankData(period, currencyType))
   }
 }
 

@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import {ActivityIndicator, Text, View, StyleSheet, ScrollView} from "react-native";
-import SplashScreen from 'react-native-splash-screen'
 
 import {getOfficeByName} from "../../component/ExCurrencyCalculator/exCurrencyCalculation";
 import {ExCurrencyRateItem} from "./ExCurrencyRateItem/ExCurrencyRateItem";
@@ -10,7 +9,6 @@ export default class ExCurrencyRate extends PureComponent {
   componentDidMount() {
     const { loadAllOffices } = this.props;
 
-    SplashScreen.hide();
     loadAllOffices();
   }
 
@@ -106,7 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   container: {
-    flex: 1
+    flex: 1,
+    marginBottom: 10
   },
   title: {
     margin: 8,

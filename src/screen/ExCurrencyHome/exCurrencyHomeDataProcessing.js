@@ -23,3 +23,33 @@ export function processCentralBankData(centralBankData) {
 
   return { lineData, chartData }
 }
+
+export function adaptCentralBankDataForChart(chartData) {
+  return chartData.reduce((dataItemAcc, dataItem) => {
+      return {
+        labels: [...dataItemAcc.labels, dataItem.period],
+        datasets: [
+          {
+            ...dataItemAcc.datasets[0],
+            data: [...dataItemAcc.datasets[0].data, dataItem["sell price"]]
+          },
+          {
+            ...dataItemAcc.datasets[1],
+            data: [...dataItemAcc.datasets[1].data, dataItem["buy price"]]
+          }
+        ]
+      }
+    },
+    {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          color: (opacity = 1) => `rgba(133, 191, 75, ${opacity})`
+        }, {
+          data: [],
+          color: (opacity = 1) => `rgba(80, 191, 191, ${opacity})`
+        }
+      ]
+    });
+}

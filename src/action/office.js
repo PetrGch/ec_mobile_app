@@ -42,7 +42,9 @@ export function getCentralBankData(period = 7, currencyType = "EUR") {
     fetch(`https://api.excurrate.com/centralBank?period=${period}&currencyType=${currencyType}`)
       .then((response) => response.json(), (ex) => new Error(ex))
       .then((data) => {
-        dispatch(setCentralBankData(data))
+        if (data) {
+          dispatch(setCentralBankData(data))
+        }
       })
       .catch((ex) => {
         console.log(ex)

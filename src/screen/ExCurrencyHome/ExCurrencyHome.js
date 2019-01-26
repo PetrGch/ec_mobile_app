@@ -1,8 +1,12 @@
 import React, {PureComponent} from "react";
 import SplashScreen from "react-native-splash-screen";
-import {ActivityIndicator, StyleSheet, View, Dimensions} from "react-native";
+import {ActivityIndicator, StyleSheet, View, Dimensions, ScrollView, Text} from "react-native";
 import {LineChart} from "react-native-chart-kit";
-import {processCentralBankData} from "./exCurrencyHomeDataProcessing";
+
+import {adaptCentralBankDataForChart, processCentralBankData} from "./exCurrencyHomeDataProcessing";
+import ExCurrencyHomeControl from "./ExCurrencyHomeControl/ExCurrencyHomeControl";
+import ExCurrencyHomeHeader from "./ExCurrencyHomeHeader/ExCurrencyHomeHeader";
+import ExCurrencyHomeTrend from "./ExCurrencyHomeTrend/ExCurrencyHomeTrend";
 
 export default class ExCurrencyHome extends PureComponent {
   constructor() {
@@ -16,15 +20,23 @@ export default class ExCurrencyHome extends PureComponent {
   }
 
   componentDidMount() {
-    const { loadAllOffices, loadCentralBankData } = this.props;
+    const { loadCentralBankData } = this.props;
 
     this.setState({
-      screenWidth: Dimensions.get('window').width
+      screenWidth: Dimensions.get('window').width - 16
     });
 
-    SplashScreen.hide();
     loadCentralBankData();
     Dimensions.addEventListener("change", this.orientationHandler);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isLoading } = this.props;
+
+    if (!isLoading && isLoading !== prevProps.isLoading) {
+      SplashScreen.hide();
+    }
+
   }
 
   componentWillUnmount() {
@@ -33,7 +45,7 @@ export default class ExCurrencyHome extends PureComponent {
 
   orientationHandler() {
     this.setState({
-      screenWidth: Dimensions.get('window').width
+      screenWidth: Dimensions.get('window').width - 16
     })
   }
 
@@ -45,37 +57,11 @@ export default class ExCurrencyHome extends PureComponent {
       return null;
     }
 
-    return centralBankProcessedData.chartData.reduce((dataItemAcc, dataItem) => {
-      return {
-        labels: [...dataItemAcc.labels, dataItem.period],
-        datasets: [
-          {
-            ...dataItemAcc.datasets[0],
-            data: [...dataItemAcc.datasets[0].data, dataItem["sell price"]]
-          },
-          {
-            ...dataItemAcc.datasets[1],
-            data: [...dataItemAcc.datasets[1].data, dataItem["buy price"]]
-          }
-        ]
-      }
-    },
-      {
-        labels: [],
-        datasets: [
-          {
-            data: [],
-            color: (opacity = 1) => `rgba(133, 191, 75, ${opacity})`
-          }, {
-            data: [],
-            color: (opacity = 1) => `rgba(80, 191, 191, ${opacity})`
-          }
-        ]
-      });
+    return adaptCentralBankDataForChart(centralBankProcessedData.chartData);
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, loadCentralBankData, centralBankData } = this.props;
     const { screenWidth } = this.state;
 
     if (isLoading) {
@@ -86,19 +72,49 @@ export default class ExCurrencyHome extends PureComponent {
       )
     }
 
-    return this.chartData && (
-      <View style={styles.container}>
-        <LineChart
-          data={this.chartData}
-          width={screenWidth}
-          height={220}
-          chartConfig={{
-            backgroundGradientFrom: '#eee',
-            backgroundGradientTo: '#eee',
-            color: (opacity = 1) => `rgba(66, 66, 66, ${opacity})`
-          }}
-        />
-      </View>
+    const chartData = this.chartData;
+
+    return chartData && centralBankData && (
+      <ScrollView>
+        <View style={styles.container}>
+          <ExCurrencyHomeHeader
+            title={centralBankData.dataHeader.title_eng}
+            subTitle={centralBankData.dataHeader.subtitle_eng}
+            source={centralBankData.dataHeader.source_of_data_eng}
+            lastUpdate={centralBankData.dataHeader.last_updated}
+            currencyName={centralBankData.dataHeader.currency_name_eng}
+          />
+          <ExCurrencyHomeControl
+            loadCentralBankData={loadCentralBankData}
+          />
+          <View style={styles.chartWrapper}>
+            <LineChart
+              withDots={false}
+              data={chartData}
+              width={screenWidth}
+              height={220}
+              chartConfig={{
+                backgroundGradientFrom: '#eee',
+                backgroundGradientTo: '#eee',
+                color: (opacity = 1) => `rgba(66, 66, 66, ${opacity})`
+              }}
+            />
+            <View style={styles.legend}>
+              <View style={[styles.legendItem, { marginRight: 20 }]}>
+                <View style={[styles.legendSquare, { backgroundColor: "#85bf4b" }]}/>
+                <Text>Buy price</Text>
+              </View>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendSquare, { backgroundColor: "#50bfbf" }]}/>
+                <Text>Sell price</Text>
+              </View>
+            </View>
+          </View>
+          <ExCurrencyHomeTrend
+            data={centralBankData}
+          />
+        </View>
+      </ScrollView>
     )
   }
 }
@@ -111,6 +127,25 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    backgroundColor: '#e26a00',
+    marginBottom: 10
+  },
+  chartWrapper: {
+    margin: 8,
+    marginBottom: 0
+  },
+  legend: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 8
+  },
+  legendItem: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  legendSquare: {
+    width: 16,
+    height: 16,
+    marginRight: 6
   }
 });

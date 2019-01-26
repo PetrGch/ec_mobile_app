@@ -9,7 +9,7 @@ const IS_BUY = "IS_BUY";
 const IS_SELL = "IS_SELL";
 const { Item } = Picker;
 
-function getPickerItems(currencyTypes) {
+export function getPickerItems(currencyTypes) {
   if (!currencyTypes) {
     return null;
   }
