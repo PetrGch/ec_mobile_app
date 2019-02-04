@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "337740225933",
+    "firebase_url": "https://excurratemobile.firebaseio.com",
+    "project_id": "excurratemobile",
+    "storage_bucket": "excurratemobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337740225933:android:f55b3f2a81642a85",
+        "android_client_info": {
+          "package_name": "com.excurrate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337740225933-0p0vk1t2fdmkrh70o3teg8ui4uv90tv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkY5x89OHauqzdCUZK7gEM9v2fEhkFnpw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

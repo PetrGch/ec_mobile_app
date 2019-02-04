@@ -24,13 +24,13 @@ const rangeTypes = [
   }
 ];
 
-export default class ExCurrencyHomeControl extends PureComponent {
+export default class ExCurrencyHomeControl extends React.Component {
   constructor() {
     super();
 
     this.state = {
       selectedCurrency: "EUR",
-      selectedRange: "week"
+      selectedRange: "7"
     };
 
     this.selectCurrencyType = this.selectCurrencyType.bind(this);
@@ -43,7 +43,7 @@ export default class ExCurrencyHomeControl extends PureComponent {
 
     loadCentralBankData(selectedRange, selectedCurrency);
     this.setState({
-      selectedCurrency
+      selectedCurrency: selectedCurrency
     });
   }
 
@@ -68,7 +68,7 @@ export default class ExCurrencyHomeControl extends PureComponent {
           <Picker
             style={styles.dropDownPicker}
             selectedValue={selectedCurrency}
-            mode={"dropdown"}
+            mode="dropdown"
             onValueChange={this.selectCurrencyType}>
             {currencyPickerItem}
           </Picker>
@@ -77,7 +77,7 @@ export default class ExCurrencyHomeControl extends PureComponent {
           <Picker
             selectedValue={selectedRange}
             style={styles.dropDownPicker}
-            mode={"dropdown"}
+            mode="dropdown"
             onValueChange={this.selectRangeType}>
             {rangePickerItem}
           </Picker>

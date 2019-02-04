@@ -64,14 +64,6 @@ export default class ExCurrencyHome extends PureComponent {
     const { isLoading, loadCentralBankData, centralBankData } = this.props;
     const { screenWidth } = this.state;
 
-    if (isLoading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
-
     const chartData = this.chartData;
 
     return chartData && centralBankData && (
@@ -88,17 +80,25 @@ export default class ExCurrencyHome extends PureComponent {
             loadCentralBankData={loadCentralBankData}
           />
           <View style={styles.chartWrapper}>
-            <LineChart
-              withDots={false}
-              data={chartData}
-              width={screenWidth}
-              height={220}
-              chartConfig={{
-                backgroundGradientFrom: '#eee',
-                backgroundGradientTo: '#eee',
-                color: (opacity = 1) => `rgba(66, 66, 66, ${opacity})`
-              }}
-            />
+            {
+              isLoading ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator/>
+                </View>
+                ) : (
+                <LineChart
+                  withDots={false}
+                  data={chartData}
+                  width={screenWidth}
+                  height={220}
+                  chartConfig={{
+                    backgroundGradientFrom: '#eee',
+                    backgroundGradientTo: '#eee',
+                    color: (opacity = 1) => `rgba(66, 66, 66, ${opacity})`
+                  }}
+                />
+              )
+            }
             <View style={styles.legend}>
               <View style={[styles.legendItem, { marginRight: 20 }]}>
                 <View style={[styles.legendSquare, { backgroundColor: "#85bf4b" }]}/>
@@ -110,9 +110,13 @@ export default class ExCurrencyHome extends PureComponent {
               </View>
             </View>
           </View>
-          <ExCurrencyHomeTrend
-            data={centralBankData}
-          />
+          {
+            !isLoading && (
+              <ExCurrencyHomeTrend
+                data={centralBankData}
+              />
+            )
+          }
         </View>
       </ScrollView>
     )
@@ -123,7 +127,9 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    height: 150,
+    backgroundColor: "#eee"
   },
   container: {
     width: "100%",

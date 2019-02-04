@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     borderRadius: 6
   },
   officeGridFilter: {
-    width: "50%"
+    width: "45%"
   },
   officeGridFilterInput: {
     width: "100%",

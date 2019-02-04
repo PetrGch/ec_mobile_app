@@ -4,6 +4,9 @@ import {uiStartLoading, uiStopLoading} from "./ui";
 import {SELECT_CURRENCY_TYPE, SET_ALL_OFFICES, SET_CENTRAL_BANK_DATA, SET_CURRENCY_AMOUNT} from "../constant/office";
 import {prepopulateCurrencyType} from "./actionCalculation";
 
+const ALL_OFFICE_FETCH = "ALL_OFFICE_FETCH";
+const CENTRAL_BANK = "CENTRAL_BANK";
+
 function setAllOffices(offices) {
   return {
     offices,
@@ -14,7 +17,7 @@ function setAllOffices(offices) {
 
 export function getAllOffices() {
   return (dispatch) => {
-    dispatch(uiStartLoading());
+    dispatch(uiStartLoading(ALL_OFFICE_FETCH));
 
     fetch("https://api.excurrate.com/exCompany")
       .then((response) => {
@@ -43,7 +46,7 @@ export function getAllOffices() {
           })
       )
       .finally(() => {
-        dispatch(uiStopLoading());
+        dispatch(uiStopLoading(ALL_OFFICE_FETCH));
       })
   }
 }
@@ -57,7 +60,7 @@ function setCentralBankData(centralBankData) {
 
 export function getCentralBankData(period = 7, currencyType = "EUR") {
   return (dispatch) => {
-    dispatch(uiStartLoading());
+    dispatch(uiStartLoading(CENTRAL_BANK));
 
     fetch(`https://api.excurrate.com/centralBank?period=${period}&currencyType=${currencyType}`)
       .then((response) => response.json())
@@ -84,7 +87,7 @@ export function getCentralBankData(period = 7, currencyType = "EUR") {
           })
       )
       .finally(() => {
-        dispatch(uiStopLoading());
+        dispatch(uiStopLoading(CENTRAL_BANK));
       })
   }
 }
