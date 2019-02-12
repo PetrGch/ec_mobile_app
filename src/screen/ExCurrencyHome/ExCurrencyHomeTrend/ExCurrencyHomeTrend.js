@@ -18,13 +18,14 @@ function TrendRow({ prevPrice, price }) {
 }
 
 function renderTrendItems(dataDetail) {
-  if (!dataDetail) {
+  if (!dataDetail || !dataDetail.central_bank_details) {
     return null;
   }
+
   let prevSellPrice = null;
   let prevBuyPrice = null;
 
-  return dataDetail.map((trend, index) => {
+  return dataDetail.central_bank_details.map((trend, index) => {
     const backgroundColor = index % 2 !== 0 ? "#eee" : "#fff" ;
 
     const trendItem = (
@@ -34,22 +35,22 @@ function renderTrendItems(dataDetail) {
         </View>
         <View style={styles.trendItemPrice}>
           <Text style={{marginRight: 4}}>
-            {parseFloat(trend.lines.buy_price).toFixed(3)}
+            {parseFloat(trend.buy_price).toFixed(3)}
           </Text>
-          <TrendRow prevPrice={prevBuyPrice} price={trend.lines.buy_price}/>
+          <TrendRow prevPrice={prevBuyPrice} price={trend.buy_price}/>
         </View>
         <View style={styles.trendItemPrice}>
           <Text style={{marginRight: 4}}>
-            {parseFloat(trend.lines.sell_price).toFixed(3)}
+            {parseFloat(trend.sell_price).toFixed(3)}
           </Text>
-          <TrendRow prevPrice={prevSellPrice} price={trend.lines.sell_price}/>
+          <TrendRow prevPrice={prevSellPrice} price={trend.sell_price}/>
         </View>
       </View>
     );
 
 
-    prevBuyPrice = trend.lines.buy_price;
-    prevSellPrice = trend.lines.sell_price;
+    prevBuyPrice = trend.buy_price;
+    prevSellPrice = trend.sell_price;
 
     return trendItem;
   })
@@ -58,7 +59,7 @@ function renderTrendItems(dataDetail) {
 export default class ExCurrencyHomeTrend extends PureComponent {
   render() {
     const { data } = this.props;
-    const trends = renderTrendItems(data.dataDetail);
+    const trends = renderTrendItems(data);
 
     return (
       <View style={styles.container}>

@@ -1,22 +1,17 @@
 import moment from "moment";
 
 export function processCentralBankData(centralBankData) {
-  if (!centralBankData || !centralBankData.dataDetail) {
+  if (!centralBankData || !centralBankData.central_bank_details) {
     return null;
   }
 
-  const lineData = [];
+  const lineData = ["sell price", "buy price"];
+  const chartData = centralBankData.central_bank_details.map(detail => {
+    const period = moment(detail.period).format("MM/DD");
+    const parsedData = { period };
 
-  const chartData = centralBankData.dataDetail.map(data => {
-    const period = moment(data.period).format("MM/DD");
-    const parsedData = {period};
-    Object.keys(data.lines).forEach(key => {
-      const newField = key.replace("_", " ");
-      if (lineData.indexOf(newField) === -1) {
-        lineData.push(newField);
-      }
-      parsedData[newField] = parseFloat(data.lines[key]).toFixed(3);
-    });
+    parsedData["sell price"] = parseFloat(detail.sell_price).toFixed(3);
+    parsedData["buy price"] = parseFloat(detail.buy_price).toFixed(3);
 
     return parsedData;
   });

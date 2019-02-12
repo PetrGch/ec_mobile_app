@@ -1,16 +1,16 @@
 import React from "react";
 import {Text, View, StyleSheet} from "react-native";
 
-export default function ExCurrencyHomeHeader({ source, title, subTitle, lastUpdate, currencyName }) {
-  return (
+export default function ExCurrencyHomeHeader({ centralBankData }) {
+  return centralBankData && centralBankData.source_of_data_eng ? (
     <View style={styles.container}>
-      <Text style={styles.title}>{source}</Text>
-      <Text style={styles.subTitle}>{title}</Text>
-      <Text>{subTitle}</Text>
-      <Text>{currencyName}</Text>
-      <Text>Last update: {lastUpdate}</Text>
+      <Text style={styles.title}>{centralBankData.source_of_data_eng}</Text>
+      <Text style={styles.subTitle}>{centralBankData.title_eng}</Text>
+      <Text>{centralBankData.subtitle_eng}</Text>
+      <Text>{centralBankData.currency_name_eng}</Text>
+      <Text>Last update: {centralBankData.last_updated}</Text>
     </View>
-  );
+  ) : null;
 }
 
 const styles = StyleSheet.create({

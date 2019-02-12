@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import SplashScreen from "react-native-splash-screen";
-import {ActivityIndicator, StyleSheet, View, Dimensions, ScrollView, Text} from "react-native";
+import {ActivityIndicator, StyleSheet, View, Dimensions, ScrollView, Text, ToastAndroid} from "react-native";
 import {LineChart} from "react-native-chart-kit";
 
 import {adaptCentralBankDataForChart, processCentralBankData} from "./exCurrencyHomeDataProcessing";
@@ -26,14 +26,17 @@ export default class ExCurrencyHome extends PureComponent {
       screenWidth: Dimensions.get('window').width - 16
     });
 
+    ToastAndroid.show('DidMount', ToastAndroid.SHORT);
+
     loadCentralBankData();
     Dimensions.addEventListener("change", this.orientationHandler);
   }
 
   componentDidUpdate(prevProps) {
     const { isLoading } = this.props;
-
+    ToastAndroid.show('Updated', ToastAndroid.SHORT);
     if (!isLoading && isLoading !== prevProps.isLoading) {
+      ToastAndroid.show('Updated and hide splashScreen', ToastAndroid.SHORT);
       SplashScreen.hide();
     }
 
@@ -63,18 +66,14 @@ export default class ExCurrencyHome extends PureComponent {
   render() {
     const { isLoading, loadCentralBankData, centralBankData } = this.props;
     const { screenWidth } = this.state;
-
     const chartData = this.chartData;
+    ToastAndroid.show(`render ${!!chartData} and ${!!centralBankData}`, ToastAndroid.SHORT);
 
     return chartData && centralBankData && (
       <ScrollView>
         <View style={styles.container}>
           <ExCurrencyHomeHeader
-            title={centralBankData.dataHeader.title_eng}
-            subTitle={centralBankData.dataHeader.subtitle_eng}
-            source={centralBankData.dataHeader.source_of_data_eng}
-            lastUpdate={centralBankData.dataHeader.last_updated}
-            currencyName={centralBankData.dataHeader.currency_name_eng}
+            centralBankData={centralBankData}
           />
           <ExCurrencyHomeControl
             loadCentralBankData={loadCentralBankData}
