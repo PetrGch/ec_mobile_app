@@ -25,6 +25,10 @@
       <meta-data
           android:name="com.google.android.geo.API_KEY"
           android:value="AIzaSyAdnkvpznxT9ako2Ha7eL7D5gcjpi6dCro"/>
+      <meta-data
+          android:name="com.google.android.gms.ads.APPLICATION_ID"
+          android:value="ca-app-pub-2778407729992409~5053790404"
+      />
     </application>
 
 </manifest>
