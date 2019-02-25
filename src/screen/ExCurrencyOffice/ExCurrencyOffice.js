@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import {ActivityIndicator, View, StyleSheet, ScrollView} from "react-native";
+import {AdMobBanner} from "react-native-admob";
 
 import ExCurrencyOfficeCalculator from "./ExCurrencyOfficeCalculator/ExCurrencyOfficeCalculator";
 import ExCurrencyOfficeList from "./ExCurrencyOfficeList/ExCurrencyOfficeList";
@@ -54,6 +55,11 @@ export default class ExCurrencyOffice extends PureComponent {
     return (
       <ScrollView>
         <View style={styles.container}>
+          <AdMobBanner
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-3940256099942544/6300978111"
+          />
+
           <ExCurrencyOfficeCalculator
             currencyTypes={currencyTypes}
             filteredOffices={filteredOffices}
@@ -64,10 +70,16 @@ export default class ExCurrencyOffice extends PureComponent {
             operationType={operationType}
             selectOperationType={this.selectOperationType}
           />
+
           <ExCurrencyOfficeList
             operationType={operationType}
             filteredOffices={filteredOffices}
             currencyAmount={currencyAmount}
+          />
+
+          <AdMobBanner
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-3940256099942544/6300978111"
           />
         </View>
       </ScrollView>

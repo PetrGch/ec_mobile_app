@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Navigation } from "react-native-navigation";
 import moment from "moment";
+import {AdMobBanner} from "react-native-admob";
 
 import ExCurrencyCalculator from "../../component/ExCurrencyCalculator/ExCurrencyCalculator";
 import ExCurrencyOfficeMap from "../ExCurrencyOfficeMap/ExCurrencyOfficeMap";
@@ -145,6 +146,11 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
     return (
       <ScrollView>
         <View style={styles.container}>
+          <AdMobBanner
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-3940256099942544/6300978111"
+          />
+
           <View style={styles.header}>
             <Text style={styles.officeName}>Office name: {selectedOffice.company_name}</Text>
             <Text style={styles.branchName}>Branch name: {selectedOffice.branch_name}</Text>
@@ -217,6 +223,10 @@ export default class ExCurrencyOfficeInfo extends PureComponent {
         <ExCurrencyOfficeDetail
           address={selectedOffice.address}
           detail={selectedOffice.exchange_company_detail}
+        />
+        <AdMobBanner
+          adSize="smartBannerPortrait"
+          adUnitID="ca-app-pub-3940256099942544/6300978111"
         />
       </ScrollView>
     );

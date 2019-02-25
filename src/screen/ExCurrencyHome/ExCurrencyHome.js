@@ -2,7 +2,7 @@ import React, {PureComponent} from "react";
 import SplashScreen from "react-native-splash-screen";
 import {ActivityIndicator, StyleSheet, View, Dimensions, ScrollView, Text} from "react-native";
 import {LineChart} from "react-native-chart-kit";
-import { AdMobBanner } from 'react-native-admob'
+import {AdMobBanner} from 'react-native-admob'
 
 import {adaptCentralBankDataForChart, processCentralBankData} from "./exCurrencyHomeDataProcessing";
 import ExCurrencyHomeControl from "./ExCurrencyHomeControl/ExCurrencyHomeControl";
@@ -68,6 +68,10 @@ export default class ExCurrencyHome extends PureComponent {
     return chartData && centralBankData && (
       <ScrollView>
         <View style={styles.container}>
+          <AdMobBanner
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-2778407729992409/3026392863"
+          />
           <ExCurrencyHomeHeader
             centralBankData={centralBankData}
           />
@@ -113,10 +117,8 @@ export default class ExCurrencyHome extends PureComponent {
             )
           }
           <AdMobBanner
-            adSize="fullBanner"
-            adUnitID="ca-app-pub-2778407729992409/7514773534"
-            testDevices={[AdMobBanner.simulatorId]}
-            onAdFailedToLoad={error => console.error(error)}
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-3940256099942544/6300978111"
           />
         </View>
       </ScrollView>

@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import {ActivityIndicator, Text, View, StyleSheet, ScrollView} from "react-native";
+import {AdMobBanner} from "react-native-admob";
 
 import {getOfficeByName} from "../../component/ExCurrencyCalculator/exCurrencyCalculation";
 import {ExCurrencyRateItem} from "./ExCurrencyRateItem/ExCurrencyRateItem";
@@ -59,6 +60,11 @@ export default class ExCurrencyRate extends PureComponent {
     return (
       <ScrollView>
         <View style={styles.container}>
+          <AdMobBanner
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-3940256099942544/6300978111"
+          />
+
           <ExCurrencyCalculator
             officeName="Central Bank Of Thailand"
             currencyTypes={currencyTypes}
@@ -91,6 +97,10 @@ export default class ExCurrencyRate extends PureComponent {
             </View>
           </View>
           {exCurrencyRateList}
+          <AdMobBanner
+            adSize="smartBannerPortrait"
+            adUnitID="ca-app-pub-3940256099942544/6300978111"
+          />
         </View>
       </ScrollView>
     );
